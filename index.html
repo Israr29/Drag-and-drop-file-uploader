@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drag & Drop Uploader</title>
+  
+</head>
+<body>
+    <style>
+       
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: #f4f4f9;
+}
+
+.upload-container {
+  text-align: center;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  width: 900px;   
+  max-width: 90%; 
+}
+
+#preview img {
+  margin-top: 20px;
+  width: 100%;         
+  max-height: 500px;   
+  object-fit: contain; 
+  border-radius: 10px;
+}
+
+
+#drop-area {
+  border: 2px dashed #4CAF50;
+  padding: 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#drop-area:hover {
+  background: #f0fff0;
+}
+
+#error-message {
+  color: red;
+  margin-top: 10px;
+}
+
+#progress-container {
+  width: 100%;
+  background: #ddd;
+  border-radius: 5px;
+  margin-top: 15px;
+  height: 10px;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 10px;
+  width: 0%;
+  background: #4CAF50;
+}
+
+
+
+    </style>
+
+  <div class="upload-container">
+    <h2>Drag & Drop File Uploader</h2>
+    
+    <div id="drop-area">
+      <p>Drag & Drop your image here or</p>
+      <input type="file" id="fileInput" accept="image/*">
+    </div>
+
+    <div id="error-message"></div>
+
+    <div id="progress-container">
+      <div id="progress-bar"></div>
+    </div>
+
+    <div id="preview"></div>
+  </div>
+
+  <script>
+   
+
+const dropArea = document.getElementById("drop-area");
+const fileInput = document.getElementById("fileInput");
+const preview = document.getElementById("preview");
+const progressBar = document.getElementById("progress-bar");
+const errorMsg = document.getElementById("error-message");
+
+
+const validTypes = ["image/jpeg", "image/png", "image/gif"];
+
+
+window.addEventListener("load", () => {
+  const savedImage = localStorage.getItem("uploadedImage");
+  if (savedImage) {
+    showPreview(savedImage);
+  }
+});
+
+
+fileInput.addEventListener("change", (e) => {
+  handleFile(e.target.files[0]);
+});
+
+
+dropArea.addEventListener("dragover", (e) => {
+  e.preventDefault();
+  dropArea.style.background = "#e0ffe0";
+});
+
+
+dropArea.addEventListener("dragleave", () => {
+  dropArea.style.background = "white";
+});
+
+
+dropArea.addEventListener("drop", (e) => {
+  e.preventDefault();
+  dropArea.style.background = "white";
+  handleFile(e.dataTransfer.files[0]);
+});
+
+
+function handleFile(file) {
+  errorMsg.textContent = "";
+
+  if (!file) return;
+
+  if (!validTypes.includes(file.type)) {
+    errorMsg.textContent = "❌ Only JPG, PNG, or GIF allowed!";
+    return;
+  }
+
+  simulateUpload(file);
+}
+
+
+function simulateUpload(file) {
+  let progress = 0;
+  progressBar.style.width = "0%";
+
+  const interval = setInterval(() => {
+    if (progress >= 100) {
+      clearInterval(interval);
+      readFile(file); 
+    } else {
+      progress += 10;
+      progressBar.style.width = progress + "%";
+    }
+  }, 200); 
+}
+
+
+function readFile(file) {
+  const reader = new FileReader();
+  reader.readAsDataURL(file);
+
+  reader.onload = () => {
+    const imageData = reader.result;
+    showPreview(imageData);
+
+   
+    localStorage.setItem("uploadedImage", imageData);
+  };
+}
+
+
+function showPreview(imageData) {
+  preview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+}
+
+  </script>
+</body>
+</html>
