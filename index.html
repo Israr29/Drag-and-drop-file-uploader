@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Drag & Drop Uploader</title>
+  <link rel="icon" type="icon" href="./assets/logo.png">
   
 </head>
 <body>
@@ -69,6 +70,22 @@ body {
   background: #4CAF50;
 }
 
+#removeBtn {
+  margin-top: 10px;
+  padding: 6px 12px;
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#removeBtn:hover {
+  background: #e60000;
+}
+
+
 
 
     </style>
@@ -103,12 +120,12 @@ const errorMsg = document.getElementById("error-message");
 const validTypes = ["image/jpeg", "image/png", "image/gif"];
 
 
-window.addEventListener("load", () => {
-  const savedImage = localStorage.getItem("uploadedImage");
-  if (savedImage) {
-    showPreview(savedImage);
-  }
-});
+
+function removeImage() {
+  preview.innerHTML = "";
+  progressBar.style.width = "0%";
+  localStorage.removeItem("uploadedImage"); 
+}
 
 
 fileInput.addEventListener("change", (e) => {
@@ -179,7 +196,14 @@ function readFile(file) {
 
 
 function showPreview(imageData) {
-  preview.innerHTML = `<img src="${imageData}" alt="Preview">`;
+  preview.innerHTML = `
+    <img src="${imageData}" alt="Preview">
+    <br>
+    <button id="removeBtn">❌ Remove Image</button>
+  `;
+
+  
+  document.getElementById("removeBtn").addEventListener("click", removeImage);
 }
 
   </script>
