@@ -1,11 +1,18 @@
 ## Drag-n-Drop File Uploader
 
-🔹 Features I implemented:
+ Features I implemented:
+ 
 ✅ Drag & drop file upload support
+
 ✅ Live image preview using FileReader API
+
+
 ✅ Progress bar simulation
+
 ✅ Validation for image file types (JPG, PNG, GIF)
+
 ✅ Error handling for invalid files
+
 ✅ Persistence with localStorage (image stays after refresh)
 
 
