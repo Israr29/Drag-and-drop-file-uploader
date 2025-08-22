@@ -1,6 +1,6 @@
 ## Drag-n-Drop File Uploader
 
- Features I implemented:
+ Features:
  
 ✅ Drag & drop file upload support
 
